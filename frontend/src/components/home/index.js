@@ -1,11 +1,14 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import 'rsuite/dist/styles/rsuite-default.css';
 import ReactPlayer from 'react-player';
 import * as tf from '@tensorflow/tfjs';
 import * as handpose from '@tensorflow-models/handpose';
 import Webcam from 'react-webcam';
 import { Container, Content} from 'rsuite';
-import {drawHand} from './utilities'
+import {drawHand} from './utilities';
+
+import * as fp from 'fingerpose';
+
 import './style.scss';
 
 const Home = () =>{
@@ -41,6 +44,17 @@ const Home = () =>{
             // Make Detections
             const hand = await net.estimateHands(video);
             console.log(hand);
+
+            if (hand.length > 0) {
+                const GE = new fp.GestureEstimator([
+                    fp.Gestures.ThumbsUpGesture,
+                    fp.Gestures.VictoryGesture,
+                ]);
+        
+
+                const gesture = await GE.estimate(hand[0].landmarks, 8);
+                console.log(gesture);
+            }
 
             // Draw mesh
             const ctx = canvasRef.current.getContext("2d");
