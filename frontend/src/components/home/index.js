@@ -52,7 +52,7 @@ const Home = () =>{
                 ]);
         
 
-                const gesture = await GE.estimate(hand[0].landmarks, 8);
+                const gesture = await GE.estimate(hand[0].landmarks, 4);
                 console.log(gesture);
             }
 
