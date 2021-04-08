@@ -8,6 +8,8 @@ import { Container, Content} from 'rsuite';
 import {drawHand} from './utilities';
 
 import * as fp from 'fingerpose';
+import {thumbsDownGesture} from './gestures/thumbsDown';
+import {pauseGesture} from './gestures/pause';
 
 import './style.scss';
 
@@ -51,6 +53,8 @@ const Home = () =>{
                 const GE = new fp.GestureEstimator([
                     fp.Gestures.ThumbsUpGesture,
                     fp.Gestures.VictoryGesture,
+                    thumbsDownGesture,
+                    pauseGesture,
                 ]);
         
 
