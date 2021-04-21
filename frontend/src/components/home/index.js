@@ -23,7 +23,7 @@ const Home = () =>{
     const runHandpose = async () => {
         const net = await handpose.load();
         // console.log("Handpose model loaded.");
-        //  Loop and detect hands
+        //  Loop e detecção das mãos
         setInterval(() => {
         detect(net);
         }, 100);
@@ -32,20 +32,20 @@ const Home = () =>{
     const detect = async(net) =>{
         if(typeof webcamRef.current !== "undefined" && webcamRef.current !== null && webcamRef.current.video.readyState === 4) {
             
-             // Get Video Properties
+             // Pega as propriedades do video
             const video = webcamRef.current.video;
             const videoWidth = webcamRef.current.video.videoWidth;
             const videoHeight = webcamRef.current.video.videoHeight;
 
-            // Set video width
+            // Define a largura do video 
             webcamRef.current.video.width = videoWidth;
             webcamRef.current.video.height = videoHeight;
 
-            // Set canvas height and width
+            // Define a altura e largura do canvas 
             canvasRef.current.width = videoWidth;
             canvasRef.current.height = videoHeight;
 
-            // Make Detections
+            // Realiza a detecção
             const hand = await net.estimateHands(video);
             // console.log(hand);
 
@@ -72,7 +72,7 @@ const Home = () =>{
 
             }
 
-            // Draw mesh
+            // Desenha o esqueleto da mão
             const ctx = canvasRef.current.getContext("2d");
             drawHand(hand, ctx);
         }

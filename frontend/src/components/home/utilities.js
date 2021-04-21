@@ -1,4 +1,4 @@
-// Points for fingers
+// Pontos do dedo
 const fingerJoints = {
   thumb: [0, 1, 2, 3, 4],
   indexFinger: [0, 5, 6, 7, 8],
@@ -7,50 +7,50 @@ const fingerJoints = {
   pinky: [0, 17, 18, 19, 20],
 };
 
-// Infinity Gauntlet Style
+//Style
 const style = {
-  0: { color: "red", size: 5 },
-  1: { color: "red", size: 5 },
-  2: { color: "red", size: 5 },
-  3: { color: "red", size: 5 },
-  4: { color: "red", size: 5 },
-  5: { color: "red", size: 5 },
-  6: { color: "red", size: 5 },
-  7: { color: "red", size: 5 },
-  8: { color: "red", size: 5 },
-  9: { color: "red", size: 5 },
-  10: { color: "red", size: 5 },
-  11: { color: "red", size: 5 },
-  12: { color: "red", size: 5 },
-  13: { color: "red", size: 5 },
-  14: { color: "red", size: 5 },
-  15: { color: "red", size: 5 },
-  16: { color: "red", size: 5 },
-  17: { color: "red", size: 5 },
-  18: { color: "red", size: 5 },
-  19: { color: "red", size: 5 },
-  20: { color: "red", size: 5 },
+  0: { color: "green", size: 5 },
+  1: { color: "green", size: 5 },
+  2: { color: "green", size: 5 },
+  3: { color: "green", size: 5 },
+  4: { color: "green", size: 5 },
+  5: { color: "green", size: 5 },
+  6: { color: "green", size: 5 },
+  7: { color: "green", size: 5 },
+  8: { color: "green", size: 5 },
+  9: { color: "green", size: 5 },
+  10: { color: "green", size: 5 },
+  11: { color: "green", size: 5 },
+  12: { color: "green", size: 5 },
+  13: { color: "green", size: 5 },
+  14: { color: "green", size: 5 },
+  15: { color: "green", size: 5 },
+  16: { color: "green", size: 5 },
+  17: { color: "green", size: 5 },
+  18: { color: "green", size: 5 },
+  19: { color: "green", size: 5 },
+  20: { color: "green", size: 5 },
 };
 
 // Drawing function
 export const drawHand = (predictions, ctx) => {
-  // Check if we have predictions
+  // analisa se tem previsão
   if (predictions.length > 0) {
-    // Loop through each prediction
+    // Faça um loop em cada previsão
     predictions.forEach((prediction) => {
-      // Grab landmarks
+      // Pegue pontos de referência
       const landmarks = prediction.landmarks;
 
-      // Loop through fingers
+      // Loop através dos dedos
       for (let j = 0; j < Object.keys(fingerJoints).length; j++) {
         let finger = Object.keys(fingerJoints)[j];
-        //  Loop through pairs of joints
+        //  Loop através de pares de juntas
         for (let k = 0; k < fingerJoints[finger].length - 1; k++) {
-          // Get pairs of joints
+          // Obtenha pares de juntas
           const firstJointIndex = fingerJoints[finger][k];
           const secondJointIndex = fingerJoints[finger][k + 1];
 
-          // Draw path
+          // Desenhe o caminho
           ctx.beginPath();
           ctx.moveTo(
             landmarks[firstJointIndex][0],
@@ -66,17 +66,17 @@ export const drawHand = (predictions, ctx) => {
         }
       }
 
-      // Loop through landmarks and draw em
+      // Percorra pontos de referência e desenhe-os
       for (let i = 0; i < landmarks.length; i++) {
-        // Get x point
+        // Obtenha x pontos
         const x = landmarks[i][0];
-        // Get y point
+        // Obtenha y pontos
         const y = landmarks[i][1];
-        // Start drawing
+        // Comece a desenhar
         ctx.beginPath();
         ctx.arc(x, y, style[i]["size"], 0, 3 * Math.PI);
 
-        // Set line color
+        // Definir a cor da linha
         ctx.fillStyle = style[i]["color"];
         ctx.fill();
       }
