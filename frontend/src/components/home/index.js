@@ -47,7 +47,7 @@ const Home = () =>{
 
             // Realiza a detecção
             const hand = await net.estimateHands(video);
-            // console.log(hand);
+            //console.log(hand);
 
             if (hand.length > 0) {
                 const GE = new fp.GestureEstimator([
@@ -84,7 +84,7 @@ const Home = () =>{
         <div className="show-container">
             <Container>
                 <Content>
-                    <ReactPlayer className='react-player' url={['https://www.youtube.com/watch?v=M7TKRcA8KDk', 'https://www.youtube.com/watch?v=ilkgp4bA4Bc']} controls={true} />
+                    <ReactPlayer className='react-player' url={'https://www.youtube.com/watch?v=GH5v7oIL_jc'} controls={true} />
                     <Webcam className='webcam-display' ref={webcamRef}/>
                     <canvas className='canvas-display' ref={canvasRef}/>
                 </Content>
