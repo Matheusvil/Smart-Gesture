@@ -18,7 +18,8 @@ const Home = () =>{
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
 
-    const [action, setAction] = useState(null);
+    const [playing, setPlaying] = useState(false);
+    const [volume, setVolume] = useState(1);
 
     const runHandpose = async () => {
         const net = await handpose.load();
@@ -59,16 +60,38 @@ const Home = () =>{
         
 
                 const gesture = await GE.estimate(hand[0].landmarks, 8);
-                // console.log(gesture);
+                //console.log(gesture);
 
                 if(gesture.gestures !== undefined && gesture.gestures.length > 0 ){
                     const confidence = gesture.gestures.map( (prediction ) => prediction.confidence);
                     
-                    const maxConfidence  = confidence.indexOf(Math.max.apply(null, confidence));
-
-                    setAction(gesture.gestures[maxConfidence].name);
+                    const action = gesture.gestures.reduce((mxGesture, gesture) =>{
+                        if(!mxGesture){
+                            return gesture;
+                        }
+                        if(mxGesture.confidence > gesture.confidence){
+                            return mxGesture;
+                        }
+                        return gesture;
+                    })
+                    
                     console.log(action);
+
+                    if(action.name === 'victory'){
+                        setPlaying(true);
+                    }
+                    else if(action.name === 'pause'){
+                        setPlaying(false);
+                    }
+                    else if(action.name === 'thumbsDown'){
+                        setVolume(Math.max(volume - 0.3, 0));
+                    }
+                    else if(action.name === 'thumbs_up'){
+                        setVolume(Math.min(volume + 0.3, 1));
+                    }
                 }
+
+
 
             }
 
@@ -84,7 +107,13 @@ const Home = () =>{
         <div className="show-container">
             <Container>
                 <Content>
-                    <ReactPlayer className='react-player' url={'https://www.youtube.com/watch?v=GH5v7oIL_jc'} controls={true} />
+                    <ReactPlayer 
+                        className='react-player' 
+                        url={'https://www.youtube.com/watch?v=GH5v7oIL_jc'}  
+                        controls={true}
+                        playing={playing}
+                        volume={volume}
+                        />
                     <Webcam className='webcam-display' ref={webcamRef}/>
                     <canvas className='canvas-display' ref={canvasRef}/>
                 </Content>
