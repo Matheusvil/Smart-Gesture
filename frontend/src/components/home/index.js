@@ -15,15 +15,15 @@ import {pauseGesture} from './gestures/pause';
 import './style.scss';
 
 const runHandpose = async (webcamRef, canvasRef, onAction) => {
+    // Constante que carrega o modulo handpose
     const net = await handpose.load();
     let action = undefined;
+    // Função Throttle para chamar o action a cada 1 segundo
     const throttleFunction = throttle(function(){
         if(action){
             onAction(action);
         }
     }, 1000)
-    //  Loop e detecção das mãos
-    console.log("carregou");
     setInterval(async () => {
     action = await detect(net, webcamRef, canvasRef, onAction);
     if(action){
@@ -50,8 +50,8 @@ const detect = async(net, webcamRef, canvasRef, onAction) =>{
 
         // Realiza a detecção
         const hand = await net.estimateHands(video);
-        //console.log(hand);
 
+        // If que adiciona os valores do landmarks referente aos gestos cadastrados.
         if (hand.length > 0) {
             const GE = new fp.GestureEstimator([
                 fp.Gestures.ThumbsUpGesture,
@@ -60,10 +60,10 @@ const detect = async(net, webcamRef, canvasRef, onAction) =>{
                 pauseGesture,
             ]);
     
-
+            // Constante que guarda os valores dos possiveis gestos, é definido pela confidencia obtida.
             const gesture = await GE.estimate(hand[0].landmarks, 8);
-            //console.log(gesture);
 
+            // If que pega o nome e a confidencia do gesto com a maior confidencia obtida no momento!
             if(gesture.gestures !== undefined && gesture.gestures.length > 0 ){
                 const confidence = gesture.gestures.map( (prediction ) => prediction.confidence);
                 
@@ -97,8 +97,9 @@ const Home = () =>{
 
     const [playing, setPlaying] = useState(false);
     const [volume, setVolume] = useState(0.5);
+    
+    // Realiza o controle do player
     const handleAction = (action) =>{
-        console.log(volume);
         if(action.name === 'victory'){
             setPlaying(true);
         }
@@ -112,16 +113,15 @@ const Home = () =>{
             setVolume((vol) => Math.max(vol - 0.1, 0));
         }
     }
+
     useEffect( () =>{
         runHandpose(webcamRef, canvasRef, (action) =>{
             handleAction(action);
         });
     }, [webcamRef, canvasRef]);
     
-    console.log('recarregou');
     return(
         <div className="show-container">
-            {volume}
             <Container>
                 <Content>
                     <ReactPlayer 
@@ -133,7 +133,6 @@ const Home = () =>{
                         />
                     <Webcam className='webcam-display' ref={webcamRef}/>
                     <canvas className='canvas-display' ref={canvasRef}/>
-                    <button onClick={() => handleAction({name: 'thumbsDown'})}>click</button>
                 </Content>
             </Container>
         </div>
